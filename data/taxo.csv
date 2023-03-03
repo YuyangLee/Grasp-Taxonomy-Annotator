@@ -1,0 +1,34 @@
+﻿Id,Name,Type,Subtype,ThumbAdducted
+1,Large Diameter,Power,Palm,1
+2,Small Diameter,Power,Palm,1
+3,Medium Wrap,Power,Palm,1
+4,Adducted Thumb,Power,Palm,0
+5,Light Tool,Power,Palm,0
+6,Prismatic 4 Finger,Precision,Pad,1
+7,Prismatic 3 Finger,Precision,Pad,1
+8,Prismatic 2 Finger,Precision,Pad,1
+9,Palmar Pinch,Precision,Pad,1
+10,Power Disk,Power,Palm,1
+11,Power Sphere,Power,Palm,1
+12,Precision Disk,Precision,Pad,1
+13,Precision Sphere,Precision,Pad,1
+14,Tripod,Precision,Pad,1
+15,Fixed Hook,Power,Palm,0
+16,Lateral,Intermediate,Side,0
+17,Index Finger Extension,Power,Palm,0
+18,Extension Type,Power,Pad,1
+19,Distal Type,Power,Pad,1
+20,Writing Tripod,Precision,Side,1
+21,Tripod Variation,Intermediate,Side,1
+22,Parallel Extension,Precision,Pad,0
+23,Adduction Grip,Intermediate,Side,1
+24,Tip Pinch,Precision,Pad,1
+25,Lateral Tripod,Intermediate,Side,0
+26,Sphere 4-Finger,Power,Pad,1
+27,Quadpod,Precision,Pad,1
+28,Sphere 3-Finger,Power,Pad,1
+29,Stick,Intermediate,Side,0
+30,Palmar,Power,Palm,0
+31,Ring,Power,Pad,1
+32,Ventral,Intermediate,Side,0
+33,Inferior Pincer,Precision,Pad,1

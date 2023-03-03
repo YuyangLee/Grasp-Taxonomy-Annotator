@@ -11,6 +11,12 @@
     font-family: "Montserrat";
 }
 
+.division {
+    width:50%;
+    height:500px;
+    float:left;
+}
+
 button {
     align-items: center;
     background-color: #0A66C2;
@@ -55,4 +61,13 @@ button:disabled {
     cursor: not-allowed;
     background: rgba(0, 0, 0, .08);
     color: rgba(0, 0, 0, .3);
+}
+
+.place-image{
+    display:none;
+}
+
+div.place-image{
+    width:200;
+    height:200;  
 }
