@@ -1,0 +1,89 @@
+<!--
+ * @Author: Aiden Li
+ * @Date: 2023-03-03 08:24:37
+ * @LastEditors: Aiden Li (i@aidenli.net)
+ * @LastEditTime: 2023-03-03 09:06:56
+ * @Description: Grasp Type Annotator
+-->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Grasp Taxonomy Annotator</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body onload="showGraspInfo()">
+    <div class="main">
+        <h1>Grasp Taxonomy / 抓握分类</h1>
+
+        <p id="info"></p>
+
+        <iframe src="grasps/0c45308b-257b-4672-a6d7-458dcffbcb6b.html" id="grasp_iframe" name="Grasp" width="80%" height="500px"></iframe>
+    
+        <br />
+    
+        <button style="background-color: #7CBB00;" onclick="handleButtonClick(1)"><p>Power Grasp / 力量抓握</p></button>
+        <button style="background-color: #FFBB00;" onclick="handleButtonClick(2)"><p>Intermediate Grasp / 中间抓握</p></button>
+        <button style="background-color: #F65314;" onclick="handleButtonClick(3)"><p>Precision Grasp / 精准抓握</p></button>
+        
+        <br />
+        
+        <button style="background-color: #3F3F3F;" onclick="handleButtonClick(0)"><p>Not a Good Grasp / 抓握不佳</p></button>
+        <br />
+
+        <p id="page">页面控制</p>
+    
+        <button onclick="previousPage()">< Previous / 上一个</button>
+        <button onclick="nextPage()">Next / 下一个 ></button>
+	</div>
+
+
+    <script>
+        // 创建一个数组来存储 UUID
+        var uuids = [
+            "f439be97-ffc9-483d-a356-df5c5c20d403",
+            "0c45308b-257b-4672-a6d7-458dcffbcb6b",
+            "28baa6ab-005d-4412-8425-f7b3c60bdc38",
+        ];
+
+        // 记录当前显示的 UUID 的索引
+        var currentIndex = 0;
+
+        // 记录用户的选择
+        var userChoices = {};
+
+        function showGraspInfo() {
+            document.getElementById("info").innerHTML = "当前抓握：" + uuids[currentIndex];
+            document.getElementById("page").innerHTML = (currentIndex + 1) + " / " + uuids.length;
+
+            if (uuids[currentIndex] in userChoices) {
+                alert('您在当前页面选择了：' + userChoices[uuids[currentIndex]]);
+            }
+                
+        }
+
+        function handleButtonClick(choice) {
+            userChoices[uuids[currentIndex]] = ["Bad", "Power", "Intermediate", "Precision"][choice];
+        }
+
+        function previousPage() {
+            index = (currentIndex - 1) % uuids.length;
+            if (index < 0){
+                index += uuids.length - 1;
+            }
+            updateGrasp(index);
+        }
+
+        function nextPage() {
+            updateGrasp((currentIndex + 1) % uuids.length);
+        }
+
+        function updateGrasp(targetIndex) {
+            currentIndex = targetIndex;
+            document.getElementById("grasp_iframe").src = "grasp/" + uuids[targetIndex] + ".html";
+        }
+
+    </script>
+
+</body>
+</html>
