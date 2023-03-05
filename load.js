@@ -9,7 +9,22 @@ var colors = {
   Precision: "#7CBB00",
 };
 
+function generateUUID() {
+  let array = new Uint8Array(16);
+  window.crypto.getRandomValues(array);
+  array[6] = (array[6] & 0x0f) | 0x40;
+  array[8] = (array[8] & 0x3f) | 0x80;
+  let uuid = [...array].map((b) => b.toString(16).padStart(2, "0")).join("");
+  return `${uuid.slice(0, 8)}-${uuid.slice(8, 12)}-${uuid.slice(
+    12,
+    16
+  )}-${uuid.slice(16, 20)}-${uuid.slice(20)}`;
+}
+
 var metas;
+var userId = generateUUID();
+
+console.log("User ID: " + userId);
 
 async function loadData() {
   await fetch("./grasps/grasps.json")
@@ -26,16 +41,19 @@ async function loadData() {
       console.log("Loaded " + Object.keys(json).length + " taxonomies.");
 
       let _n_but = 1;
+      let curType= metas[0]["Type"];
       metas.forEach(function (meta) {
+        // if (meta["Type"] != curType) {
+        //   curType = meta["Type"];
+        //   br = document.createElement("br");
+        //   taxoImageDiv.appendChild(br);
+        // }
         n_but = _n_but.toString();
         var taxoButton = document.createElement("button");
         color = colors[meta["Type"]];
-        // taxoButton.onclick = function () {
-        //   handleButtonClick(_n_but);
-        // };
-		taxoButton.setAttribute("onclick", "handleButtonClick(" + _n_but + ")");
+        taxoButton.setAttribute("onclick", "handleButtonClick(" + _n_but + ")");
         taxoButton.style = "background-color:" + color + ";";
-        taxoButton.innerHTML = meta["Name"];
+        taxoButton.innerHTML = meta["Id"] + ". " + meta["Name"];
 
         var taxoImage = document.createElement("img");
         taxoImage.src = "data/img/" + n_but + ".png";
@@ -67,35 +85,41 @@ async function loadData() {
 
 function showGraspInfo() {
   document.getElementById("info").innerHTML = "Current Grasp: " + uuids[currentIndex];
-  document.getElementById("page").innerHTML = currentIndex + 1 + " / " + uuids.length;
+  document.getElementById("page").innerHTML = (currentIndex + 1) + " / " + uuids.length;
 
   if (uuids[currentIndex] in userChoices) {
-    document.getElementById("info").innerHTML += "(" + userChoices[uuids[currentIndex]] + ")";
+    document.getElementById("info").innerHTML +=
+      " (" + userChoices[uuids[currentIndex]] + ")";
   }
 }
 
 function handleButtonClick(choice) {
-	if (choice > 1) {
-		userChoices[uuids[currentIndex]] = metas[choice - 1]["Type"] + "/" + metas[choice - 1]["Name"];
-	}
-	else if (choice == -1) userChoices[uuids[currentIndex]] = "Bad";
-	else if (choice == 0) delete userChoices[uuids[currentIndex]];
+  if (choice > 1) {
+    userChoices[uuids[currentIndex]] =
+      metas[choice - 1]["Type"] + "/" + metas[choice - 1]["Name"];
+  } else if (choice == -1) userChoices[uuids[currentIndex]] = "Bad";
+  else if (choice == 0) delete userChoices[uuids[currentIndex]];
 
-	console.log("User choice on" + uuids[currentIndex] + ": " + userChoices[uuids[currentIndex]])
-	
-	showGraspInfo();
-	nextPage();
+  console.log(
+    "User choice on" +
+      uuids[currentIndex] +
+      ": " +
+      userChoices[uuids[currentIndex]]
+  );
+
+  showGraspInfo();
+  nextPage();
 }
 
 function downloadButtonClick() {
   let userChoicesJSON = JSON.stringify(userChoices);
   let blob = new Blob([userChoicesJSON], { type: "application/json" });
   let url = URL.createObjectURL(blob);
-  console.log("Downloaded file")
-  
-  var link = document.createElement('a');
+  console.log("Downloaded file");
+
+  var link = document.createElement("a");
   link.href = url;
-  link.download = "user_choices.json";
+  link.download = userId + ".json";
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -115,7 +139,8 @@ function nextPage() {
 
 function updateGrasp(targetIndex) {
   currentIndex = targetIndex;
-  document.getElementById("grasp_iframe").src = "grasps/" + uuids[targetIndex] + ".html";
+  document.getElementById("grasp_iframe").src =
+    "grasps/" + uuids[targetIndex] + ".html";
   showGraspInfo();
 }
 
@@ -123,4 +148,5 @@ async function onLoad() {
   await loadData();
   showGraspInfo();
   updateGrasp(0);
+  document.getElementById("user").innerHTML = "Current Session: " + userId;
 }
