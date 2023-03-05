@@ -127,7 +127,19 @@
     },
     {
         "Id": 5,
-        "Name": "Prismatic 4/3/2 Finger",
+        "Name": "Prismatic 4 Finger",
+        "Type": "Precision",
+        "Subtype": "Pad"
+    },
+    {
+        "Id": 6,
+        "Name": "Prismatic 3 Finger",
+        "Type": "Precision",
+        "Subtype": "Pad"
+    },
+    {
+        "Id": 7,
+        "Name": "Prismatic 2 Finger",
         "Type": "Precision",
         "Subtype": "Pad"
     },
