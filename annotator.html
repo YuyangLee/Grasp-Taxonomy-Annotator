@@ -2,150 +2,51 @@
  * @Author: Aiden Li
  * @Date: 2023-03-03 08:24:37
  * @LastEditors: Aiden Li (i@aidenli.net)
- * @LastEditTime: 2023-03-03 09:06:56
+ * @LastEditTime: 2023-03-05 15:26:02
  * @Description: Grasp Type Annotator
 -->
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Grasp Taxonomy Annotator</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat">
-    <link rel="stylesheet" href="style.css">
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
-</head>
-<body onload="onLoad()">
-    <div class="main">
-        <h1>Grasp Taxonomy</h1>
+  <head>
+	<title>Grasp Taxonomy Annotator</title>
+	<link
+	  rel="stylesheet"
+	  href="https://fonts.googleapis.com/css2?family=Montserrat"
+	/>
+	<link rel="stylesheet" href="style.css" />
+	<script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script type="text/javascript" src="./load.js"></script>
 
-        <div class="division" style="width:40%;"><iframe src="grasps/0c45308b-257b-4672-a6d7-458dcffbcb6b.html" id="grasp_iframe" name="Grasp" width="100%" height="100%"></iframe></div>
-        <div class="division" style="width:10%;">
-            <div style="margin:auto;width:100%" id="grasp-image-container"></div>
-        </div>
-        <div class="division" style="width:50%;"><img style="height:100%" src="data/33-taxo.png" alt="Taxonomy showcase"></div>
-        <br />
+  </head>
+  <body onload="onLoad()">
+	<div class="main">
+	  <h1>Grasp Taxonomy</h1>
 
-        <div id="button-container"></div>
-        <br />
+	  <div class="division" style="width: 45%">
+		<iframe src="" id="grasp_iframe" name="Grasp" width="100%" height="100%"></iframe>
+	  </div>
+	  <!-- <div class="division" style="width: 10%"><div style="margin: auto; width: 100%" id="grasp-image-container"></div></div> -->
+	  <div class="division" style="width: 45%"><img style="height: 100%" src="data/33-taxo.png" alt="Taxonomy showcase" /></div>
+	  <br />
 
-        <button style="background-color: #3F3F3F;" onclick="handleButtonClick(-1)"><p>Bad Grasp</p></button>
-        <br />
-        
-        <button onclick="previousPage()">< Previous</button>
-        <button onclick="nextPage()">Next ></button>
-        
-        <p id="info"></p>
-        <p id="page"></p>
+	  <div id="button-container"></div>
+	  <br />
+
+	  <button style="background-color: #3f3f3f" onclick="handleButtonClick(-1)"><p>Bad Grasp</p></button>
+	  <button style="background-color: #3f3f3f" onclick="handleButtonClick(0)"><p>Cancel Selection</p></button>
+	  <br />
+
+	  <button onclick="previousPage()">< Previous</button>
+	  <button id="download-button" onclick="downloadButtonClick()">Download Choices</button>
+	  <button onclick="nextPage()">Next ></button>
+
+	  <p id="info"></p>
+	  <p id="page"></p>
 	</div>
-
-
-    <script>
-        var uuids = [
-            "f439be97-ffc9-483d-a356-df5c5c20d403",
-            "0c45308b-257b-4672-a6d7-458dcffbcb6b",
-            "28baa6ab-005d-4412-8425-f7b3c60bdc38",
-        ];
-
-        var currentIndex = 0;
-
-        var userChoices = {};
-        var colors = {
-            "Power": "#F65314",
-            "Intermediate": "#FFBB00",
-            "Precision": "#7CBB00",
-        };
-
-        var metas;
-        var fs = require('fs');
-
-        function loadTaxonomies() {
-            fetch('./data/taxo.json')
-            .then((response) => response.json())
-            .then((json) => {
-                metas = json;
-                console.log("Loaded " + Object.keys(json).length + " taxonomies.");
-
-                let _n_but = 1;
-                metas.forEach(function(meta) {
-                    n_but = _n_but.toString();
-                    console.log(n_but);
-                    var taxoButton = document.createElement('button');
-                    color = colors[meta["Type"]]
-                    taxoButton.onclick = function() {
-                        handleButtonClick(_n_but-1);
-                    }
-                    taxoButton.style="background-color:" + color + ";";
-                    taxoButton.innerHTML = meta["Name"];
-                    <!-- taxoButton.innerHTML = meta["Type"] + " / " + meta["Name"]; -->
-
-                    var taxoImage = document.createElement('img');
-                    taxoImage.src = "data/img/" + n_but + ".png";
-                    taxoImage.style = "width:100%;display:block;";
-                    
-                    var taxoImageDiv = document.createElement('div');
-                    taxoImageDiv.id = "grasp-image" + n_but
-                    taxoImageDiv.classList.add("place-image")
-                    
-                    taxoImageDiv.appendChild(taxoImage);
-                    
-                    taxoButton.id = "button-" + n_but;
-                    document.getElementById("button-container").appendChild(taxoButton);
-                    document.getElementById("grasp-image-container").appendChild(taxoImageDiv);
-                    
-                    $('#' + taxoButton.id).hover(
-                        function() { $('#grasp-image' + n_but).fadeIn('slow'); },
-                        function() { $('#grasp-image' + n_but).fadeOut('fast'); }
-                    );
-
-                    _n_but += 1;
-                });
-            });
-        }
-
-        
-        function showGraspInfo() {
-            document.getElementById("info").innerHTML = "Current Grasp: " + uuids[currentIndex];
-            document.getElementById("page").innerHTML = (currentIndex + 1) + " / " + uuids.length;
-            
-            if (uuids[currentIndex] in userChoices) {
-                document.getElementById("info").innerHTML += "(" + userChoices[uuids[currentIndex]] + ")"
-            }
-            
-        }
-        
-        function handleButtonClick(choice) {
-            userChoices[uuids[currentIndex]] = metas[choice-1]["Type"] + "/" + metas[choice-1]["Name"];
-            fs.writeFile("res.json", userChoices, function(err) {
-                if (err) {
-                    console.log(err);
-                }
-            });
-            showGraspInfo();
-            nextPage();
-        }
-        
-        function previousPage() {
-            index = (currentIndex - 1) % uuids.length;
-            if (index < 0){
-                index += uuids.length - 1;
-            }
-            updateGrasp(index);
-        }
-        
-        function nextPage() {
-            updateGrasp((currentIndex + 1) % uuids.length);
-        }
-        
-        function updateGrasp(targetIndex) {
-            currentIndex = targetIndex;
-            document.getElementById("grasp_iframe").src = "grasp/" + uuids[targetIndex] + ".html";
-            showGraspInfo();
-        }
-        
-        function onLoad() {
-            loadTaxonomies();
-            showGraspInfo();
-        }
-    </script>
-
-</body>
+	<footer>
+		<p>
+			<!-- Website by <a href="https://yuyangli.com" target="_blank">Yuyang Li</a> and New Bing -->
+		</p>
+	</footer>
+  </body>
 </html>
