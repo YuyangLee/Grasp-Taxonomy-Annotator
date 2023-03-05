@@ -3,7 +3,7 @@
 According to [The GRASP Taxonomy of Human Grasp Types](https://ieeexplore.ieee.org/document/7243327), there are 33 types of human grasps:
 
 
-![GRASP Taxonomy](assets\GRASP.Taxonomy.png)
+![GRASP Taxonomy](assets/GRASP.Taxonomy.png)
 
 However, it is difficult to classify grasps for a dexterous hand (e.g. Shadow Hand, Allegro, etc) barely by its q-pose and contact points. To enable more efficient manual annotation of grasp type, we design this project.
 
@@ -24,7 +24,7 @@ You need to visualize all your grasps with HTML. It's recommended to use `plotly
 
 Open `annotator.html` with a browser. You can see the main page of the annotator:
 
-![Annotator](assets\Annotator.Unselected.png)
+![Annotator](assets/Annotator.Unselected.png)
 
 ### Information
 
@@ -34,7 +34,7 @@ I'd like to introduce the information at the buttom, which shows:
 - Session id (to identify you and the JSON you download)
 - Your selection for the current grasp (if selected)
 
-![Annotator](assets\Annotator.Selected.png)
+![Annotator](assets/Annotator.Selected.png)
 
 ### Annotation
 
@@ -67,7 +67,7 @@ python show_choices.py
 
 It will plot the taxonomy choices.
 
-![Choices](assets\choices.png)
+![Choices](assets/choices.png)
 
 > I'd like to thank the New Bing for helping me writing some code.
 > 
